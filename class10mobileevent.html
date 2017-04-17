@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, user-scalable=no ">
+		<style>
+			.box{
+				width: 200px;
+				height: 200px;
+				background: pink;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box"></div>
+		<script>
+			var obox = document.getElementsByClassName("box")[0];
+//			obox.ontouchstart = function(){
+//				this.style.background = "green";
+//			}
+//			注意：在移动端开发的时候，浏览器的模拟器时好时坏，一般不用ON绑定事件，
+//用addEventLinster绑定。
+//			obox.addEventListener("touchstart", start);
+//			function start(){
+//				this.style.background = "yellow";
+//			}
+			//Pc上的时间比移动端的时间略慢，大概是在300ms左右。
+			//obox.addEventListener("mousedown", start);
+		
+		
+		</script>
+	</body>
+</html>

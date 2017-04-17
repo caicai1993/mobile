@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body{
+				margin: 0;
+			}
+			ul{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			body,html{
+				position: relative;
+				height: 100%;
+				overflow: hidden;
+			}
+			header{
+				font: bold 40px/60px "微软雅黑";
+				text-align: center;
+				color: #fff;
+				width: 100%;
+				height: 60px;
+				position: absolute;
+				left: 0;
+				top: 0;
+				background: #000;
+				opacity: 0.5;
+			}
+			.wrap{
+				width: 100%;
+				position: absolute;
+				left: 0;
+				bottom: 60px;
+				top: 60px;
+				overflow: hidden;
+			}
+			.content{
+				width: 100%;
+			}
+			.content>li{
+				width: 100%;
+				height: 80px;
+				font: bold 40px/80px "微软雅黑";
+				border-bottom: 1px solid #000;
+			}
+			footer{
+				font: bold 40px/60px "微软雅黑";
+				text-align: center;
+				color: #fff;
+				width: 100%;
+				height: 60px;
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				background: #000;
+				opacity: 0.5;
+			}
+		</style>
+	</head>
+	<body>
+		<!--
+			1、3D硬件加速：使用3D的时候，计算是通过硬件去实现的，会比软件效率高很多。在父级加上：translateZ: 0.01;
+		-->
+		<header>这是头部</header>
+		<div class="wrap">
+			<ul class="content"></ul>
+		</div>
+		<footer>这是尾部</footer>
+		<script src="m.Tween.js"></script>
+		<script>
+			var wrap = document.getElementsByClassName("wrap")[0];
+			var cont = document.getElementsByClassName("content")[0];
+			var str = "";
+			for(var i=0; i<100; i++){
+				str += "<li>"+i+"</li>";
+			}
+			cont.innerHTML = str;
+			
+			scrollFn({	"el"	:wrap,
+						"onoff": true
+				});
+			
+			function scrollFn(init){
+				if(!init.el){ return; }
+				
+				document.addEventListener("touchstart", function(ev){
+					ev.preventDefault();
+				});//除去浏览器默认行为
+				
+				var starty = 0, 	//开始时候的位置
+					oldy = 0, 		//手指点下的时候的位置
+					movey = 0, 		//手指移动到的位置
+					movedis = 0,	//手指移动的距离
+					starttime = 0, 	//按下的时间
+					endtime = 0,	//移动的时候的时间
+					speed = 0,		//滑动的速度
+					timedis = 0,	//两次手指移动时间间隔
+					scale = 0,		//比例
+					lasty = 0, 		//记录上一次的Y值
+					cont = init.el.children[0],	//被拖拽的元素
+					wrap = init.el;	//包裹
+					
+				css(cont, "translateZ", 0.01); //3D硬件加速
+				
+				var scrollBar = document.createElement("div");//浮动条
+				scrollBar.style.cssText = "width:6px;background:rgba(0,0,0,.5);position:absolute;right:0;top:0;border-radius:3px;opacity:0;transition:.3s opacity;";
+				
+				var onoff = init.onoff;//自定义滚动条是否设置
+				if(onoff){
+					wrap.appendChild(scrollBar);
+				}
+				
+				var maxTanslate = wrap.clientHeight - cont.offsetHeight;//最大的滚动高
+				
+				cont.addEventListener("touchstart", function(ev){
+					timedis = 0;
+					movedis = 0;
+							
+					maxTanslate = wrap.clientHeight - cont.offsetHeight;
+					starttime = new Date().getTime();
+					
+					oldy = ev.changedTouches[0].pageY;
+					starty = css(cont, "translateY");
+					lasty = starty;
+					
+					clearInterval(cont.timer);
+					
+					if(onoff){
+						scale = wrap.clientHeight/cont.offsetHeight;
+						scrollBar.style.height = wrap.clientHeight*scale+"px";
+						scrollBar.style.opacity = 1;
+						if(maxTanslate >= 0) {
+							scrollBar.style.display = "none";
+						} else {
+							scrollBar.style.display = "block";
+						}
+					}
+				});
+				
+				cont.addEventListener("touchmove", function(ev){
+					endtime = new Date().getTime();
+					timedis = endtime - starttime;
+					starttime = endtime;
+					
+					var dis = ev.changedTouches[0].pageY - oldy;
+					movey = dis+starty;
+					css(cont, "translateY", movey);
+					
+					movedis = movey - lasty;
+					lasty = movey;
+				});
+				
+				cont.addEventListener("touchend", function(ev){
+					speed = Math.round(movedis/timedis*10);
+					speed = timedis<=0 ? 0 : speed;//处理的是movedis/timedis中除数为0，速度的值为无限大的情况
+					
+					var type = "easeOut";
+					//当向上滑动到最底端的位置， 和往下滑动到最顶端的位置时
+					var target = Math.round(speed*30 + css(cont, "translateY"));
+					if(target>0){
+						target = 0;
+						type = "backOut";
+					}else if(target<maxTanslate){//因为maxTanslate是一个负值
+						target = maxTanslate;
+						type = "backOut";
+					}
+					//移动完成后,缓冲的距离
+					MTween({
+						el: cont,
+						target: {"translateY": target},
+						type: type,
+						time: Math.round(Math.abs(target - css(cont,"translateY"))*1.8),
+						callBack: function(){
+							if(onoff){
+								scrollBar.style.opacity = 0;
+							}
+						},
+						callIn: function(){
+							if(onoff){
+								var trY  = css(cont, "translateY");
+								css(scrollBar, "translateY", -trY*scale);
+							}
+						}
+					});
+				});
+			}
+		</script>
+	</body>
+</html>

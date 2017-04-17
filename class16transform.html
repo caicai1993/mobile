@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no">
+		<title></title>
+		<script>
+			document.addEventListener("touchstart", function(e){
+				e.preventDefault();
+			});
+		</script>
+	</head>
+	<body>
+		<!--
+			注意：在手机端要加前缀 -webkit-transform：不然不容易被识别。
+			transform:;复合参数先写的后执行
+			移动端不推荐使用left/top去做动画，推荐使用transform来做动画，性能会更好。
+			rotate 	旋转（deg）
+			skew 	斜切 (deg)
+				skewX 	与Y轴夹角
+				skewY	与X轴夹角
+			skew(x, y);
+			scale(x, y);	缩放
+			scale(数值);
+			translate(x, y) 位移（px）;
+			transform-origin: center center;
+			参数可以是关键字、百分比、数值px;
+			
+			transform中涉及到的矩阵：
+			matrix(1,0,0,1,0,0)默认写法
+			matrix(a,b,c,d,e,f);
+			位移：
+				x轴位移= e+x;
+				y轴位移 = f+y;
+			缩放：
+				x轴： a = a*x;
+					x = c*x;
+					e = e*x;
+				y轴：b = b*x;
+					d = d*x;
+					f = f*x;
+			后写的先执行，构成下面的不同矩阵：
+			先位移，后缩放
+				位移-matrix(1,0,0,1，100,100);
+				缩放-matrix(0.5,0,0,0.5,50,50);
+			先缩放，后位移
+				缩放-matrix(0.5,0,0,0.5,0,0);
+				位移-matrix(0.5,0,0,0.5，100,100);
+			斜切：skew()(弧度)
+				skewX() x斜切：  b=Math.tan(30*Math.PI/180);
+				skewY()
+			3D:
+			在父级加上景深：-webkit-perspective;
+			rotateX/rotateY/rotateZ/rotate(X,Y,Z);
+			translateX/translateY/tanslateZ/translate3D(负值是往内)
+			transform-style：flat(不保留)/perserve-3d(保留); 元素在做3D变换的时候，是否保留子元素的3d变换。
+			transform-origin： center center;//
+			-webkit-backface-visibility: hidden;//隐藏背面
+			
+		-->
+	</body>
+</html>

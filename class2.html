@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body{
+				font: 12px/18px "微软雅黑";
+			}
+			#box{
+				width: 30px;
+				height: 30px;
+				background: red;
+				color: #fff;
+				font-size: 20px;
+			}
+		</style>
+		<meta name="viewport" content="width = client-width ">
+		<meta name="x5-orientation" content="portrait">
+		<!--<meta name="x5-orientation" content="portrait|landscape"> //x5（qq/微信）浏览器强制竖/横屏
+		<meta name="screen-orientation" content="portrait|landscape"> //x5（qq/微信）浏览器强制竖/横屏
+		<meta name="screen-orientation" content="portrait|landscape">
+		<meta name="fullscreen" content="yes"> //UC浏览器-->
+		<!--禁止掉电话号码的识别-->
+		<meta name="format-detectiob" content="telephone=no, email=no">	
+	</head>
+	<body>
+		<div id="box">1</div>
+		<a href="tel:18301395208">请拨打电话</a>
+		<a href="mailto:motai@moyao.com">邮件邮件地址</a>
+	
+	
+		//移动端的问题：默认样式
+		点击的时候的高亮：
+		a,input, button{
+			-webkit-tap-hightlight-color: rgba(0,0,0,0);
+		}
+		圆角问题
+		input, button{
+			-webkit-appearance: none;
+			border-radius: 0;
+		}
+		字体：公共字体
+		body{
+			font-family: Helvetica;
+		}
+		最小字体:解决文字的缩放问题
+		body *{
+			-webkit-text-size-adjust: 100%;//禁止修改字体大小
+			-webhit-user-select: none;//移动端文字 选中，不兼容
+		}
+		//Font Boosting 在一段文字我们没有设置高度的时候 ， 在webkit内核下，文字的大小被浏览器放大了
+		解决办法：
+		1.设置高度，
+		2.设置一个最大高度。
+		适配：：：：：：：：：
+		（1）百分比适配：动态获取尺寸：
+		(function(){
+			var w = window.screen.width;
+			var targetW = 320;
+			var scale = w/targetW;//当前尺寸/目标尺寸
+		})();
+	</body>
+</html>

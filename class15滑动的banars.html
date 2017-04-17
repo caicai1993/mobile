@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, user-scalable=no"/>
+		<script type="text/javascript">
+			var html = document.documentElement;
+			/*设置root size*/
+			html.style.fontSize = html.clientWidth/15 + "px"; 
+			document.addEventListener("touchsart", function(ev){
+				ev.preventDefault();
+			});
+		</script>
+		<style>
+			body, ul, section{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			.wrap{
+				width: 100%;
+				height: 4.68rem;
+				position: relative;
+				overflow: hidden;
+			}
+			.wrap>ul{
+				width: 400%;
+				height: 100%;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+			.wrap li{
+				width: 15rem;
+				height: 100%;
+				font: bold 80px/100px "微软雅黑";
+				color: #fff;
+				background: yellow;
+				float: left;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<section class="wrap">
+			<ul>
+				<li><img src="img/img1.jpg"></li>
+				<li><img src="img/img2.jpg"></li>
+				<li><img src="img/img3.jpg"></li>
+				<li><img src="img/img4.jpg"></li>
+			</ul>
+		</section>
+		<script>
+			var owrap = document.getElementsByClassName("wrap")[0];
+			var oul = document.getElementsByTagName("ul")[0];
+			var clientw = owrap.clientWidth;
+			var oldx,oldleft,len=0;
+		
+			oul.innerHTML += oul.innerHTML;
+			len = oul.children.length;
+			oul.style.width = len*100 + "%";
+			function start(ev){
+				var e = ev.changedTouches[0];
+				oldx = e.pageX;
+				oul.style.transition = "none";
+				
+				var num = Math.round(oul.offsetLeft/clientw);
+		
+				if(num == 0){
+					num = 4;
+					oul.style.left = -num*clientw + "px";
+				}
+				
+				if(-num == len-1){
+					num = 3;
+					oul.style.left = -num*clientw + "px";
+				}
+				
+				oldleft = oul.offsetLeft;
+			}
+			function move(ev){
+				var e = ev.changedTouches[0];
+				oul.style.left = e.pageX-oldx + oldleft + "px";
+			}
+			function up(ev){
+				var e = ev.changedTouches[0];
+				var num = Math.round(oul.offsetLeft/clientw);
+
+				oul.style.left = num*clientw + "px";
+				oul.style.transition = "0.5s";
+			}
+			oul.addEventListener("touchstart", start);
+			oul.addEventListener("touchmove", move);
+			oul.addEventListener("touchend", up);
+		</script>
+	</body>
+</html>
